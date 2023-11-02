@@ -49,7 +49,7 @@ function RegisterForm() {
     <div className="grid place-items-center h-screen">
       <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
         <h1 className="text-xl font-bold my-4 text-center">Register</h1>
-        <form className="flex flex-col gap-3" onClick={handleSubmit}>
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Full Name"
