@@ -1,34 +1,35 @@
-"use client";
-import Link from "next/link";
-import React from "react";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+"use client"
+import Link from "next/link"
+import React, { useEffect } from "react"
+import { useState } from "react"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
-  const router = useRouter();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [err, setErr] = useState("")
+  const router = useRouter()
+
   const SubmitHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const res = await signIn("credentials", {
         email,
         password,
         redirect: false,
-      });
+      })
       if (res.error) {
-        setErr("Invalid Credentials");
-        return;
+        setErr("Invalid Credentials")
+        return
       }
 
-      router.replace("dashboard");
+      router.replace("dashboard")
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
   return (
     <div className="grid place-items-center h-screen">
       <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
@@ -54,14 +55,20 @@ function LoginForm() {
               {err}
             </div>
           )}
-
-          <Link href={"/register"} className="text-sm mt-3 text-right">
-            Don't have an account ? <span className="underline">Register</span>
-          </Link>
+          <div className="flex justify-between">
+            {" "}
+            <Link href={"/forgot-password"} className="text-sm mt-3 ">
+              Forgot Password?
+            </Link>
+            <Link href={"/register"} className="text-sm mt-3 text-right">
+              Don't have an account ?{" "}
+              <span className="underline">Register</span>
+            </Link>
+          </div>
         </form>
       </div>
     </div>
-  );
+  )
 }
 
-export default LoginForm;
+export default LoginForm

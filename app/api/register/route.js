@@ -15,7 +15,7 @@ export async function POST(req) {
         password: hashedPassword,
       });
       await user.save();
-      return NextResponse.json({ message: "Topic Created" }, { status: 201 });
+      return NextResponse.json({ message: "user Created" }, { status: 201 });
     } catch (error) {
       return NextResponse.json(
         { message: "An error occurred while registering the user" },
