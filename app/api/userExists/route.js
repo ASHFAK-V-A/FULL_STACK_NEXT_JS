@@ -1,13 +1,15 @@
 import connectMongoDB from "@/app/lib/connection"
 import UserModel from "@/app/models/user"
-import {NextResponse} from "next/server"
+import { NextResponse } from "next/server"
+
 
 export async function POST(req) {
+
   try {
     await connectMongoDB()
-    const {email} = await req.json()
-    const user = await UserModel.findOne({email}).select("_id")
-    return NextResponse.json({user})
+    const { email } = await req.json()
+    const user = await UserModel.findOne({ email }).select("_id")
+    return NextResponse.json({ user })
   } catch (error) {
     console.log(error)
   }
