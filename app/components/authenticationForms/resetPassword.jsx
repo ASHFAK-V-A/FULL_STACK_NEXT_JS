@@ -3,19 +3,38 @@ import React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import usePreventReturnToVerifyOTP from "@/app/hooks/prevent"
+
 function ResetPassword() {
+  const urlParams = new URLSearchParams(window.location.search)
+  const email = urlParams.get("email")
   const [password, setPassword] = useState()
+  const [confirmPass, setConfirmPass] = useState()
   const [err, setErr] = useState("")
   const router = useRouter()
+
   useEffect(() => {
     window.onpopstate = () => {
       router.push("/")
     }
   }, [])
-  const SubmitHandler = (e) => {
+  const SubmitHandler = async (e) => {
     e.preventDefault()
-    router.replace("/")
+    if (password != confirmPass) {
+      setErr("Password does't match!")
+    }
+    const res = await fetch("/api/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+    await res.json().then((res) => {
+      if (res.status == 200) {
+        router.replace("/")
+      } else {
+        setErr(res.message)
+      }
+    })
+    // router.replace("/")
   }
   return (
     <div className="grid place-items-center h-screen">
@@ -29,6 +48,12 @@ function ResetPassword() {
             placeholder="New Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Confirm Password"
+            value={confirmPass}
+            onChange={(e) => setConfirmPass(e.target.value)}
           />
           <button className="bg-green-600 text-white font-bold cursor-pointer px-5 py-2 mt-5 ">
             SUBMIT

@@ -21,7 +21,11 @@ function ForgotPassword() {
       })
       await res.json().then((res) => {
         if (res.status == 200) {
-          router.push("forgot-password/verify-otp")
+          router.push(
+            `forgot-password/verify-otp?email=${encodeURIComponent(
+              res.data.email
+            )}`
+          )
         } else {
           setErr(res.message)
         }

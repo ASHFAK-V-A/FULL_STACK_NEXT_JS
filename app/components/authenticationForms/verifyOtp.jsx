@@ -3,9 +3,11 @@
 import React, { useEffect } from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import usePreventReturnToVerifyOTP from "@/app/hooks/prevent"
 
 function VerifyOtpComponent() {
+  const urlParams = new URLSearchParams(window.location.search)
+  const email = urlParams.get("email")
+
   const [otp, setOtp] = useState("")
   const [err, setErr] = useState("")
   const router = useRouter()
@@ -15,13 +17,25 @@ function VerifyOtpComponent() {
     }
   }, [])
 
-  const SubmitHandler = (e) => {
+  const SubmitHandler = async (e) => {
     e.preventDefault()
-    // if (!otp) {
-    //   setErr("Please enter the OTP to complete the process")
-    // }
+    if (!otp) {
+      setErr("Please enter the OTP to complete the process")
+      return
+    }
 
-    router.push("/forgot-password/reset-password")
+    const res = await fetch("/api/otp-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    })
+    if (res.ok) {
+      router.push(
+        `/forgot-password/reset-password?email=${encodeURIComponent(email)}`
+      )
+    } else {
+      setErr("Someting Went Wrong !")
+    }
   }
 
   return (
